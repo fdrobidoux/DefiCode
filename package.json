@@ -1,0 +1,24 @@
+{
+  "name": "deficode",
+  "version": "1.0.0",
+  "description": "Défi de code par EzoQC",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./test/calculatrice.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fdrobidoux/DefiCode.git"
+  },
+  "author": "Félix Dion-Robidoux (@fdrobidoux)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fdrobidoux/DefiCode/issues"
+  },
+  "homepage": "https://github.com/fdrobidoux/DefiCode#readme",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0"
+  },
+  "dependencies": {}
+}
