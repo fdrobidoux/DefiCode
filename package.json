@@ -2,8 +2,10 @@
   "name": "deficode",
   "version": "1.0.0",
   "description": "Défi de code par EzoQC",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
+    "flow": "flow",
+    "build": "npx babel **/*.js *.js -d lib",
     "test": "mocha ./test/calculatrice.js"
   },
   "repository": {
@@ -17,7 +19,13 @@
   },
   "homepage": "https://github.com/fdrobidoux/DefiCode#readme",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-flow": "^6.23.0",
     "chai": "^4.1.2",
+    "flow-bin": "^0.73.0",
+    "flow-remove-types": "^1.2.3",
     "mocha": "^5.2.0"
   },
   "dependencies": {}

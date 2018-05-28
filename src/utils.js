@@ -1,8 +1,9 @@
 "use strict";
 
-function Utils() {}
-
-// Insert utilitary functions here...
-
-const _instance = new Utils();
-module.exports = _instance;
+module.exports = {
+	string: {
+		charCount(input: string, char: string) {
+			return input.split().reduce((nb, courant) => (courant == char) ? ++nb : nb, 0);
+		}
+	}
+};
