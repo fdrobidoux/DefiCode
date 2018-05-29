@@ -1,8 +1,8 @@
 "use strict";
 
-const { Equation } = require("./equation");
+import { Equation } from "./equation";
 
-function Parser() {}
+export function Parser() {}
 
 /**
  * Trouve la première paire de parenthèse ne contenant aucune autre paire de parenthèses.
@@ -31,6 +31,3 @@ Parser.solve = function solve(equation: Equation) {
 Parser.prototype.extractBinomeAt = function(index) {
 
 }
-
-/** @inheritDoc */
-module.exports = Parser;

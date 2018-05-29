@@ -1,19 +1,32 @@
 "use strict";
 
-const Parser = require("./parser");
+import { Parser } from "./parser";
+import { Operateur, operateursDefiCode } from "./operateur";
 
 /**
  * Ce type d'objet représente un bloc d'équation traitable.
- * @param {string} strValue
+ * @param {string} strEquation
  * @param {number} positionInParent
  * @constructor
  */
-function Equation(strValue: string, positionInParent: number = 0)
+export function Equation(strEquation: string, positionInParent: number = 0)
 {
-	this._initialStrValue = strValue;
-	this.strValue = strValue;
+	this._initialEq = strEquation;
+	this.eq = strEquation;
 	this.positionInParent = positionInParent;
+
+	this.extraireBinomes();
 }
 
-/** @inheritDoc */
-module.exports.Equation = Equation;
+Equation.prototype.extraireBinomes = function() {
+	for (let i in operateursDefiCode.keys()) {
+		let currOp: Operateur|RegExp = operateursDefiCode.get(i),
+			resultat;
+
+		while ((resultat = currOp.exec(this.eq)) !== null) {
+			var toArray = this.eq.split("");
+			toArray.splice(resultat.index, currOp.lastIndex - resultat.index);
+			// this.eq = toArray.join("");
+		}
+	}
+}

@@ -25,9 +25,9 @@ describe("Parser des trucs", function () {
 	})
 
 	it("doit permettre de faire un forEach numérique", function () {
-		var Operateurs = require("../lib/src/operateur");
-		for (var index of Operateurs) {
-			console.log(index);
+		const { Operateur, operateursDefiCode } = require("../lib/src/operateur");
+		for (var operateur of operateursDefiCode) {
+			console.log(operateur);
 		}
 	})
 })

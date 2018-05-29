@@ -1,48 +1,46 @@
 "use strict";
 
-const {Equation} = require("./equation");
-const Binome = require("./binome");
-const Parser = require("./parser");
+// $FlowFixMe
+import Big from "big.js";
+import { Equation } from "./equation";
+import { Binome } from "./binome";
+import { Parser } from "./parser";
 
 const REGEX_NUMBER = "([0-9]+(?:\\.[0-9]+)?)";
-const makeBinomeRegExp = (operateur: string) => `${REGEX_NUMBER}(\\${operateur})${REGEX_NUMBER}`;
+const makeBinomeRegExp = (op: string) => `${REGEX_NUMBER}(\\${op})${REGEX_NUMBER}`;
 
 /**
  * Instance d'un Opérateur. Définis le fonctionnement d'un opérateur.
  * @param {String} sign
- * @param {function} solver
- * @param {*} cbArgType
+ * @param {Function} solver
  * @param {RegExp} regExp
+ *
+ * @inheritDoc RegExp
  * @constructor
  */
-function Operateur(sign, solver, cbArgType=Binome, regExp?) {
+export function Operateur(sign: string, solver: Function, regExp?: RegExp|null = null) {
 	RegExp.call(this, (regExp || makeBinomeRegExp(sign)));
 	this.sign = sign;
 	this.solver = solver;
-	this.cbArgType = cbArgType;
 }
 
 Operateur.prototype = Object.create(RegExp.prototype);
 Operateur.prototype.constructor = Operateur;
 
-const operateurs = [
-	["(", (equation) => "TODO: FIGURE A WAY", Equation, /(sqrt)?\(([^()]+)\)/gi],
-	["^", (binome) => Math.pow(binome.gauche, binome.droite)],
-	["/", (binome) => ((binome.droite == 0)? new EvalError("Divided by zero"): binome.gauche / binome.droite)],
-	["*", (binome) => binome.gauche * binome.droite],
-	["-", (binome) => binome.gauche - binome.droite],
-	["+", (binome) => binome.gauche + binome.droite],
-]
+type Operateurs = Array<[string, Function, ?RegExp|null]>;
+
+const operateurs: Operateurs = [
+	["(", (binome) => binome.gauche.sqrt(), /(sqrt)?\(([^()]+)\)/gi],
+	["^", (binome) => binome.gauche.pow(binome.droite), null],
+	["/", (binome) => ((binome.droite == 0) ? new EvalError("Divided by zero") : binome.gauche.div(binome.droite)), null],
+	["*", (binome) => binome.gauche.times(binome.droite), null],
+	["-", (binome) => binome.gauche.minus(binome.droite), null],
+	["+", (binome) => binome.gauche.plus(binome.droite), null],
+];
+
+export const operateursDefiCode: Map<string, Operateur> = new Map();
 
 // On définis les exports et des valeurs non
-operateurs.forEach(function (value, index) {
-	/** @inheritDoc */
-	module.exports[index] = new Operateur(...value);
-	Object.defineProperty(module.exports, value[0], { value: index, enumerable: false });
-})
-
-module.exports[Symbol.iterator] = function* () {
-	for (var item in module.exports) {
-		yield module.exports[item];
-	}
+for (var op of operateurs) {
+	operateursDefiCode.set(op[0], new Operateur(...op));
 }

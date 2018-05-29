@@ -1,3 +1,9 @@
+"use strict";
+
+// $FlowFixMe
+import Big from "big.js";
+import {Operateur, operateursDefiCode} from "./operateur";
+
 /**
  * Objet Binôme. Va permettre de parcourir les éléments.
  *
@@ -6,12 +12,30 @@
  * @param {number} droite
  * @constructor
  */
-function Binome(gauche: string, operateur: string, droite: number)
-{
-	this.gauche = gauche;
-	this.operateur = operateur;
-	this.droite = droite;
+export function Binome(gauche: number | string | Big, operateur: string, droite: number | string | Big = null) {
+	this.setGauche(gauche);
+	this.setOperateur(operateur);
+	if (droite != null) {
+		this.setDroite(droite);
+	}
 }
 
-/** @inheritDoc */
-module.exports = Binome;
+Binome.prototype.setGauche = function (gauche: number | string | Big) {
+	/** @type {Big} */
+	this.gauche = (gauche instanceof Big) ? gauche : new Big(gauche);
+}
+
+Binome.prototype.setOperateur = function (operateur: string) {
+	this.operateur = operateur;
+}
+
+Binome.prototype.setDroite = function (droite: number | string | Big) {
+	/** @type {Big} */
+	this.droite = (droite instanceof Big) ? droite : new Big(droite);
+}
+
+Binome.prototype.resoudre = function () {
+	let objOperateur = operateursDefiCode.get(this.operateur);
+	// Prendre le bon objet.
+	// let result = objOperateur;
+}

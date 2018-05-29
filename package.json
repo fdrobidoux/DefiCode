@@ -28,5 +28,7 @@
     "flow-remove-types": "^1.2.3",
     "mocha": "^5.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "big.js": "^5.1.2"
+  }
 }
