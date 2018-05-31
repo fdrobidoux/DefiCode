@@ -46,3 +46,10 @@ No idea wtf I'm doing with that, mais j'vais faire mon possible lol.
 | __Spécial__ - Racine carré | Ajouter `(sqrt)?` au début du cas __"Première parenthèse [...]"__ et s'assurer de regarder dans le groupe de capture `$1` s'il n'est pas vide. | [ici]() |
 
 **TODO: Finir le tableau d'expressions régulières.**
+
+## Notes pour ma présentation
+
+##### Pourquoi je recherche dans les parenthèses qui ne contiennent aucune autre parenthèses, me forçant à re-balayer à chaque fois sur l'exécution de base?
+
+- Javascript = async avec des callbacks, mais y'a une limite de profondeur (inception) donc faut éviter d'aller dans le plus profond.
+- Permet de se débarasser des opérations possibles au moment-même, sans avoir à faire du récursif (dangereux en js et pas facile à débugger)
