@@ -2,6 +2,7 @@
 
 import { Parser } from "./parser";
 import { Operateur, operateursDefiCode } from "./operateur";
+// import { Operateur, operateursDefiCode } from "./operateur_v2";
 
 /**
  * Ce type d'objet représente un bloc d'équation traitable.
@@ -9,8 +10,7 @@ import { Operateur, operateursDefiCode } from "./operateur";
  * @param {number} positionInParent
  * @constructor
  */
-export function Equation(strEquation: string, positionInParent: number = 0)
-{
+export function Equation(strEquation: string, positionInParent: number = 0) {
 	this._initialEq = strEquation;
 	this.eq = strEquation;
 	this.positionInParent = positionInParent;
@@ -18,15 +18,13 @@ export function Equation(strEquation: string, positionInParent: number = 0)
 	this.extraireBinomes();
 }
 
-Equation.prototype.extraireBinomes = function() {
-	for (let i in operateursDefiCode.keys()) {
-		let currOp: Operateur|RegExp = operateursDefiCode.get(i),
-			resultat;
-
+Equation.prototype.extraireBinomes = function () {
+	operateursDefiCode.forEach(function (currOp: Operateur, i: string) {
+		let resultat;
 		while ((resultat = currOp.exec(this.eq)) !== null) {
 			var toArray = this.eq.split("");
 			toArray.splice(resultat.index, currOp.lastIndex - resultat.index);
 			// this.eq = toArray.join("");
 		}
-	}
+	}, this);
 }

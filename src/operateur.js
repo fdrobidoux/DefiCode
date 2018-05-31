@@ -1,41 +1,53 @@
 "use strict";
 
 // $FlowFixMe
-import Big from "big.js";
 import { Equation } from "./equation";
 import { Binome } from "./binome";
 import { Parser } from "./parser";
 
 const REGEX_NUMBER = "([0-9]+(?:\\.[0-9]+)?)";
-const makeBinomeRegExp = (op: string) => `${REGEX_NUMBER}(\\${op})${REGEX_NUMBER}`;
+const makeBinomeRegExp = function (op: string) {
+	return `/${REGEX_NUMBER}(\\${op})${REGEX_NUMBER}/gi`;
+}
+
+type Solvant = (binome: Binome) => number|Error;
 
 /**
  * Instance d'un Opérateur. Définis le fonctionnement d'un opérateur.
- * @param {String} sign
- * @param {Function} solver
- * @param {RegExp} regExp
- *
- * @inheritDoc RegExp
- * @constructor
+ * @extends RegExp
  */
-export function Operateur(sign: string, solver: Function, regExp?: RegExp|null = null) {
-	RegExp.call(this, (regExp || makeBinomeRegExp(sign)));
-	this.sign = sign;
-	this.solver = solver;
+export class Operateur extends RegExp {
+
+	signe: string;
+	solvant: Solvant;
+
+	exec(...args: any) {
+		return super.exec(...args);
+	}
+
+	/**
+	 * @constructor
+	 * @param {String} signe
+	 * @param {Solvant} solvant
+	 * @param {RegExp} regExp
+	 */
+	constructor(signe: string, solvant: Solvant, regExp?: RegExp|string|null = null) {
+		regExp = regExp || makeBinomeRegExp(signe);
+		super(regExp);
+		this.signe = signe;
+		this.solvant = solvant;
+	}
 }
 
-Operateur.prototype = Object.create(RegExp.prototype);
-Operateur.prototype.constructor = Operateur;
-
-type Operateurs = Array<[string, Function, ?RegExp|null]>;
+type Operateurs = Array<[string, Solvant, RegExp|string|null]>;
 
 const operateurs: Operateurs = [
-	["(", (binome) => binome.gauche.sqrt(), /(sqrt)?\(([^()]+)\)/gi],
-	["^", (binome) => binome.gauche.pow(binome.droite), null],
-	["/", (binome) => ((binome.droite == 0) ? new EvalError("Divided by zero") : binome.gauche.div(binome.droite)), null],
-	["*", (binome) => binome.gauche.times(binome.droite), null],
-	["-", (binome) => binome.gauche.minus(binome.droite), null],
-	["+", (binome) => binome.gauche.plus(binome.droite), null],
+	["(", (binome) => Math.sqrt(binome.gauche), /(sqrt)?\(([^()]+)\)/gi],
+	["^", (binome) => Math.pow(binome.gauche, binome.droite), null],
+	["/", (binome) => (binome.droite == 0) ? new EvalError("Divided by zero") : (binome.gauche / binome.droite), null],
+	["*", (binome) => (binome.gauche * binome.droite), null],
+	["-", (binome) => (binome.gauche - binome.droite), null],
+	["+", (binome) => (binome.gauche + binome.droite), null]
 ];
 
 export const operateursDefiCode: Map<string, Operateur> = new Map();

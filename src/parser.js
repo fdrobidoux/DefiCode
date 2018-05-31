@@ -2,12 +2,13 @@
 
 import { Equation } from "./equation";
 
-export function Parser() {}
+export function Parser() {
+}
 
 /**
  * Trouve la première paire de parenthèse ne contenant aucune autre paire de parenthèses.
  */
-Parser.prototype.findParentheseChaisPasCommentAppelerLaFonctionHelp = function() {
+Parser.prototype.findParentheseChaisPasCommentAppelerLaFonctionHelp = function () {
 	// TODO: Redéfinir la façon d'obtenir la string de l'expression régulière.
 
 	// On n'utilise pas le flag "g" ici puisqu'on veut effectuer une recherche à la fois.
@@ -28,6 +29,6 @@ Parser.solve = function solve(equation: Equation) {
  * Extracts a binome from the given string.
  * @param {number} index
  */
-Parser.prototype.extractBinomeAt = function(index) {
+Parser.prototype.extractBinomeAt = function (index) {
 
 }
