@@ -32,6 +32,7 @@ export class Binome {
 		let objOperateur = operateursDefiCode.get(this.operateur.signe);
 		// Prendre le bon objet.
 		// let result = objOperateur;
+		let result = objOperateur.solvant(this);
 	}
 
 	static parseNb(nb: number|string) {
