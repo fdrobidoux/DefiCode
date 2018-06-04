@@ -1,6 +1,6 @@
 "use strict";
 
-import { Operateur, operateursDefiCode } from "./operateur";
+import { Operateur } from "./solvant/operateur.js";
 
 export class Binome {
 
@@ -25,14 +25,11 @@ export class Binome {
 	}
 
 	/**
-	 * Résouds
-	 * @returns {Promise<void>}
+	 *
+	 * @returns {Promise<*>}
 	 */
-	async resoudre() {
-		let objOperateur = operateursDefiCode.get(this.operateur.signe);
-		// Prendre le bon objet.
-		// let result = objOperateur;
-		let result = objOperateur.solvant(this);
+	async resolve() {
+		return this.operateur.solvant(this);
 	}
 
 	static parseNb(nb: number|string) {

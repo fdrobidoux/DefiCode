@@ -1,47 +1,86 @@
 "use strict";
 
+import utils from "./utils";
 import { Parser } from "./parser";
-import { Operateur, operateursDefiCode } from "./operateur";
+import { Operateur } from "./solvant/operateur";
 import { Binome } from "./binome";
-// import { Operateur, operateursDefiCode } from "./operateur_v2";
+import { SequenceSolvants } from "./sequence-solvants";
 
 /**
- * Ce type d'objet représente un bloc d'équation traitable.
- * @param {string} strEquation
- * @param {number} positionInParent
- * @constructor
+ * @class
  */
-export function Equation(strEquation: string, positionInParent: number = 0) {
-	this._initialEq = strEquation;
-	this.eq = strEquation;
-	this.positionInParent = positionInParent;
+export class Equation {
 
-	this.extraireBinomes();
-}
+	/**
+	 * Le contenu textuel d'origine de l'équation, avant les calculs.
+	 */
+	_initialEq: string;
 
-Equation.prototype.extraireBinomes = function () {
-	for (var entry of operateursDefiCode.entries()) {
-		let currOp: Operateur = entry[1],
-			resultat;
+	/**
+	 * Le contenu textuel de l'équation dans le contexte courant.
+	 */
+	eq: string;
 
-		while ((resultat = currOp.exec(this.eq)) != null) {
-			// TODO: Effectuer le processus où on détermine quoi faire.
+	/**
+	 * L'index où se trouve l'équation courante par rapport à son équation parente.
+	 */
+	indexParent: number;
 
-			// Créer objet binome.
-			let binome = new Binome();
+	/**
+	 * Vrai si l'équation courante est l'équation de départ.
+	 */
+	isRoot: boolean;
 
-			var toArray = this.eq.split("");
-			toArray.splice(resultat.index, currOp.lastIndex - resultat.index);
-			this.eq = toArray.join("");
+	/**
+	 * Une séquence d'opérateurs. Détermine l'ordre des opérateurs et garde en mémoire quels opérateurs ne figurent pas dans notre équation.
+	 */
+	sequenceOperateurs: SequenceSolvants;
+
+	/**
+	 * Un groupe de binômes traitables sous l'ordre des opérations mathématiques.
+	 * @param {string} eq Le contenu de l'équation courante.
+	 * @param {number} indexParent L'index où se trouve l'équation courante par rapport à son équation parente.
+	 * @constructor
+	 */
+	constructor(eq: string, indexParent: number = -1) {
+		eq = utils.string.trimSpaces(eq);
+		this._initialEq = eq;
+		this.eq = eq;
+		this.indexParent = indexParent;
+		this.isRoot = (indexParent > -1);
+		if (this.isRoot) {
+			// Initialiser la séquence d'opérateurs de départ.
+			this.sequenceOperateurs = new SequenceSolvants(this);
 		}
 	}
 
-	operateursDefiCode.forEach(function (currOp: Operateur, i: string) {
-		let resultat;
-		while ((resultat = currOp.exec(this.eq)) !== null) {
-			var toArray = this.eq.split("");
-			toArray.splice(resultat.index, currOp.lastIndex - resultat.index);
-			this.eq = toArray.join("");
+	/**
+	 * @deprecated On n'effectue plus ça de même.
+	 */
+	extractBinomes() {
+		for (var currOp of SequenceSolvants.ORDRE_CONVENTIONNEL) {
+			let resultat;
+
+			while ((resultat = currOp.exec(this.eq)) != null) {
+				// TODO: Effectuer le processus où on détermine quoi faire.
+				console.dir(resultat);
+
+				// Remplacer ça par autre chose.
+				var toArray = this.eq.split("");
+				toArray.splice(resultat.index, currOp.lastIndex - resultat.index);
+				this.eq = toArray.join("");
+			}
 		}
-	}, this);
+
+		// operateursDefiCode.forEach(function (currOp: Operateur, i: string) {
+		// 	let resultat;
+		// 	while ((resultat = currOp.exec(this.eq)) !== null) {
+		// 		var toArray = this.eq.split("");
+		// 		toArray.splice(resultat.index, currOp.lastIndex - resultat.index);
+		// 		this.eq = toArray.join("");
+		// 	}
+		// }, this);
+	}
+
+
 }

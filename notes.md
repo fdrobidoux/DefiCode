@@ -47,6 +47,9 @@ No idea wtf I'm doing with that, mais j'vais faire mon possible lol.
 
 **TODO: Finir le tableau d'expressions régulières.**
 
+On n'utilise pas le flag "g" puisqu'on veut effectuer une recherche à la fois.
+Cependant, le flag "i" est utile puisqu'on veut permettre d'écrire `"SQRT"` ou `"Sqrt"` ou `"sQrt"` (etc.)
+
 ## Notes pour ma présentation
 
 ##### Pourquoi je recherche dans les parenthèses qui ne contiennent aucune autre parenthèses, me forçant à re-balayer à chaque fois sur l'exécution de base?
